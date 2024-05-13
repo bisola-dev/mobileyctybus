@@ -1,0 +1,10 @@
+{
+    "name": "mac/yctbus",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mac\\Yctbus\\": "src/"
+        }
+    }
+}

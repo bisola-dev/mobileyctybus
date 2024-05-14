@@ -1,5 +1,5 @@
 <?php
-require_once('cann.php');
+require_once('cann2.php');
 require_once('envar2.php');
 
 // Fetch existing email and phone for display
@@ -237,9 +237,9 @@ function insertBooking($conn, $staffy, $currentDate, $rid,  $nextSeatNumber,$tic
             justify-content: center; /* Center items horizontally */
             align-items: center;
             flex-direction: column; /* Stack items vertically */
-            height: 65vh; /* Adjusted height */
+            height: auto; /* Adjusted height */
             width: 100%; /* Full width */
-            margin-top: 1px; /* Add some top margin */
+            margin-top: 20px; /* Add some top margin */
         }
 
         .form-container {
@@ -249,7 +249,7 @@ function insertBooking($conn, $staffy, $currentDate, $rid,  $nextSeatNumber,$tic
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 45%; /* Adjusted width */
             text-align: center;
-            margin-bottom: 20px; /* Add space between form and table */
+            margin-bottom: 10px; /* Add space between form and table */
         }
 
         .form-group {

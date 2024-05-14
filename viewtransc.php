@@ -2,7 +2,7 @@
 
 <?php
 
-require_once('cann.php');
+require_once('cann2.php');
 require_once('envar2.php');
 
 // Check if the account exists
@@ -27,7 +27,7 @@ if ($kin === false) {
 }
 
 // Fetch wallet entries from the database and populate the table rows
-$walletQuery = "SELECT * FROM [Bus_Booking].[dbo].[wallet_trans] WHERE staffid = ? ";
+$walletQuery = "SELECT * FROM [Bus_Booking].[dbo].[wallet_trans] WHERE staffid = ? AND status = 1";
 $params = array($staffy);
 $walletResult = sqlsrv_query($conn, $walletQuery, $params);
 
@@ -60,6 +60,7 @@ if ($result === false) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>view transaction</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -74,9 +75,9 @@ if ($result === false) {
             justify-content: center; /* Center items horizontally */
             align-items: center;
             flex-direction: column; /* Stack items vertically */
-            height: 40vh; /* Reduce height to bring it up */
-    width: 100%; /* Full width */
-    margin-top: 1px; /* Add some top margin */
+            height: auto; /* Reduce height to bring it up */
+          width: 100%; /* Full width */
+          margin-top: 10px; /* Add some top margin */
         }
 
         .form-container {
@@ -86,7 +87,7 @@ if ($result === false) {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 45%; /* Adjusted width */
             text-align: center;
-            margin-bottom: 20px; /* Add space between form and table */
+             margin: 0 auto; /* Center the form */
         }
 
         .form-group {
@@ -167,6 +168,30 @@ if ($result === false) {
     background-color: #008000;
     color: #fff;
 }
+
+#balanceTable {
+    width: 90%; /* Adjusted width */
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    margin-top: 50px; /* Add more space between tables */
+    margin-bottom: 20px; /* Add space between form and table */
+    margin-left: 20px; /* Add margin to justify table to the left */
+}
+
+#balanceTable th,
+#balanceTable td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+    font-weight: bold;
+}
+
+#balanceTable th {
+    background-color: #008000;
+    color: #fff;
+}
+
+
     </style>
 </head>
 <body>
@@ -182,7 +207,7 @@ if ($result === false) {
 
     // Display wallet transactions table
     if (sqlsrv_has_rows($walletResult)) {
-        echo "<table>";
+        echo "<table id='walletTable'>"; // Set table ID to walletTable
         echo "<thead>";
         echo "<tr>";
         echo "<th>Staff ID</th>";
@@ -211,7 +236,7 @@ if ($result === false) {
     ?>
 
     <!-- Display available balance -->
-    <table class="wallet-table">
+    <table id="balanceTable"> <!-- Set table ID to balanceTable -->
         <thead>
             <tr>
                 <th>Available Balance</th>
@@ -224,6 +249,17 @@ if ($result === false) {
         </tbody>
     </table>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#walletTable').DataTable();
+        $('#balanceTable').DataTable({
+            "paging": false, // Disable pagination for balance table
+            "searching": false, // Disable searching for balance table
+            "info": false // Disable table info for balance table
+        });
+    });
+</script>
 </body>
 </html>

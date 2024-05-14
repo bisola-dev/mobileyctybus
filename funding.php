@@ -1,6 +1,6 @@
 
 <?php
-require_once('cann.php');
+require_once('cann2.php');
 require_once('envar2.php');
 
 // Fetch existing email and phone for display
@@ -26,7 +26,7 @@ if ($kin === false) {
     } 
 }
 
-$currentDate = date("Y-d-m");
+ $currentDate = date("Y-m-d");
 
 try {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -57,6 +57,7 @@ try {
             </soap:Body>
         </soap:Envelope>';
         
+
         // Initialize cURL session for posting SOAP request
         $url = 'https://portal.yabatech.edu.ng/paymentsys/webservice1.asmx?op=geninvAsync_forstaff';
         $curl = curl_init($url);
@@ -77,63 +78,37 @@ try {
 
         // Close cURL session
         curl_close($curl);
-        
-        // Construct redirection URL
-        $url2 = "https://onlinepay.yabatech.edu.ng/?v1=$data";  
 
-        // Insert into 'wallet_trans' table
-        $query = "INSERT INTO [Bus_Booking].[dbo].[wallet_trans] (staffid, amount, remita_rrr, trans_date) VALUES (?, ?, ?, ?)";
-        $params = array($staffy, $amount, $data, $currentDate);   
-        $noway3 = sqlsrv_query($conn, $query, $params);
-        
-        if ($noway3 === false) {
-            // Insertion failed
-            echo '<script type="text/javascript">alert("Incomplete wallet funding, Please try again");</script>';
+        if ($data === "") {
+            echo '<script type="text/javascript">alert("Error processing request, please try again later.");</script>';
+        } elseif ($data === '0' || $data === '1') {
+            echo '<script type="text/javascript">alert("Remitta is currently experiencing downtime. Please try again later.");</script>';
         } else {
-            // Check if the record with the staffid exists in the 'Finance' table
-            $query2 = "SELECT * FROM [Bus_Booking].[dbo].[Finance] WHERE staffid = ?";
-            $params2 = array($staffy);
-            $result = sqlsrv_query($conn, $query2, $params2);
-            
-            if ($result === false) {
-                // Error occurred while checking existing finance records
-                echo '<script type="text/javascript">alert("Error occurred while checking existing finance records");</script>';
+            if ($data === "") {
+                echo '<script type="text/javascript">alert("Error processing request, please try again later.");</script>';
+            } elseif ($data === '0' || $data === '1') {
+                echo '<script type="text/javascript">alert("Remitta is currently experiencing downtime. Please try again later.");</script>';
             } else {
-                if (sqlsrv_has_rows($result)) {
-                    // Record exists, update the existing record with the new amount
-                    $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC);
-                    $existingAmount = $row['amount'];
-                    $newAmount = $existingAmount + $amount;
-        
-                    $updateQuery = "UPDATE [Bus_Booking].[dbo].[Finance] SET amount = ? WHERE staffid = ?";
-                    $updateParams = array($newAmount, $staffy);
-                    $updateResult = sqlsrv_query($conn, $updateQuery, $updateParams);
-        
-                    if ($updateResult === false) {
-                        // Error occurred while updating the record
-                        echo '<script type="text/javascript">alert("Error occurred while updating finance records");</script>';
-                    } else {
-                        // Update successful
-                        echo '<script type="text/javascript">alert("PAY NOW, CLICK OK"); window.location.href="'.$url2.'";</script>';
-                    }
+                // Construct redirection URL
+                $url2 = "https://onlinepay.yabatech.edu.ng/?v1=$data";
+                
+                // Insert into 'wallet_trans' table
+                $query = "INSERT INTO [Bus_Booking].[dbo].[wallet_trans] (staffid, amount, remita_rrr, trans_date) VALUES (?, ?, ?, ?)";
+                $params = array($staffy, $amount, $data, $currentDate);
+                $noway3 = sqlsrv_query($conn, $query, $params);
+            
+                if ($noway3 === false) {
+                    // Insertion failed
+                    echo '<script type="text/javascript">alert("Incomplete wallet funding, Please try again");</script>';
                 } else {
-                    // Record does not exist, proceed with the insertion
-                    $insertQuery = "INSERT INTO [Bus_Booking].[dbo].[Finance] (staffid, amount) VALUES (?, ?)";
-                    $insertParams = array($staffy, $amount);
-                    $insertResult = sqlsrv_query($conn, $insertQuery, $insertParams);
-        
-                    if ($insertResult === false) {
-                        // Error occurred while inserting the record
-                        echo '<script type="text/javascript">alert("Error occurred while inserting new finance record");</script>';
-                    } else {
-                        // Insertion successful
-                        echo '<script type="text/javascript">alert("PAY NOW, CLICK OK"); window.location.href="'.$url2.'";</script>';
-                    }
+                    // Insertion successful
+                    echo '<script type="text/javascript">alert("PAY NOW, CLICK OK"); window.location.href="'.$url2.'";</script>';
                 }
             }
         }
     }
-} catch (Exception $e) {
+}
+ catch (Exception $e) {
     // Handle exceptions
     echo '<script type="text/javascript">alert("An error occurred: '.$e->getMessage().'");</script>';
 }
@@ -162,25 +137,33 @@ try {
 
         .container {
             display: flex;
-            justify-content: center; /* Center items horizontally */
+            justify-content: center;
             align-items: center;
-            flex-direction: column; /* Stack items vertically */
-            height: 60vh; /* Reduce height to bring it up */
-    width: 100%; /* Full width */
-    margin-top: 1px; /* Add some top margin */
+            flex-direction: column;
+            height: auto; /* Adjust height as needed */
+            width: 90%; /* Adjust width as needed */
+            margin: 50px auto;
+            overflow: hidden;
         }
 
         .form-container {
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 45%; /* Adjusted width */
+            max-width: 500px;
+            width: 100%;
             text-align: center;
-            margin-bottom: 50px; /* Add space between form and table */
-            
+            margin: 0 auto; /* Center the form */
         }
 
+
+   /* Additional styles for mobile responsiveness */
+   @media (min-width: 768px) {
+    .form-container {
+        width: 45%;
+    }
+}
         .form-group {
             margin-bottom: 20px;
             text-align: left;

@@ -1,6 +1,6 @@
 <?php
 
-require_once('cann.php');
+require_once('cann2.php');
 require_once('envar2.php');
 
 // Check if all required parameters are provided

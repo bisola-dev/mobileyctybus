@@ -1,5 +1,5 @@
 <?php
-require_once('cann.php');
+require_once('cann2.php');
 require_once('envar2.php');
 require_once 'phpqrcode/qrlib.php';
 
@@ -131,7 +131,7 @@ function generateQRCode($bookingDetails, $fileName) {
                 <!-- Uncomment the following block if you have the seat number -->
                 <div class="detail">
                     <label>Seat Number:</label>
-                    <span><?php echo $ticket_type.' '.$seat_no; ?></span>
+                    <span><?php echo $seat_no.' '.$ticket_type; ?></span>
                 </div> 
                 <div class="qr-code" style="position: relative;">
                     <?php 

@@ -1,7 +1,7 @@
 
 
 <?php
-require_once('cann.php');
+require_once('cann2.php');
 require_once('envar2.php');
 
 // Fetch existing email and phone for display

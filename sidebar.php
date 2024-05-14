@@ -16,7 +16,7 @@
 
         /* Sidebar styles */
         #sidebar {
-            width: 150px;
+            width: 180px;
             height: 100%;
             background-color: #008000; /* Green */
             position: fixed;
@@ -67,7 +67,7 @@
 <body>
     <div id="sidebar" style="display: none;"> <!-- Initially hidden -->
         <div class="logo">
-        <img src="glaze/yabayctlogo.png" alt="Yabayct Logo" style="width: 70px; height: auto; margin-top: 22px;">
+        <img src="glaze/yabayctlogo.png" alt="Yabayct Logo" style="width: 80px; height: auto; margin-top: 22px;">
         </div>
         <ul>
             <li><a href="busdashboard.php">Home</a></li>

@@ -1,5 +1,5 @@
 <?php
-require_once('cann.php');
+require_once('cann2.php');
 require_once('envar2.php');
 
 // Get the selected description from the AJAX request

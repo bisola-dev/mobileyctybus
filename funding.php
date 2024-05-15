@@ -84,11 +84,6 @@ try {
         } elseif ($data === '0' || $data === '1') {
             echo '<script type="text/javascript">alert("Remitta is currently experiencing downtime. Please try again later.");</script>';
         } else {
-            if ($data === "") {
-                echo '<script type="text/javascript">alert("Error processing request, please try again later.");</script>';
-            } elseif ($data === '0' || $data === '1') {
-                echo '<script type="text/javascript">alert("Remitta is currently experiencing downtime. Please try again later.");</script>';
-            } else {
                 // Construct redirection URL
                 $url2 = "https://onlinepay.yabatech.edu.ng/?v1=$data";
                 
@@ -107,7 +102,6 @@ try {
             }
         }
     }
-}
  catch (Exception $e) {
     // Handle exceptions
     echo '<script type="text/javascript">alert("An error occurred: '.$e->getMessage().'");</script>';

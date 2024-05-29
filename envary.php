@@ -5,4 +5,8 @@ $midd = $_SESSION['MIDDLENAME'];
 
 $staffy = $_SESSION['staffy']; 
 
-$name= $surn.' '.$firs.' '.$midd; ?>
+$name= $surn.' '.$firs.' '.$midd; 
+
+if ($staffy == ""){header("Location:logout.php");}
+
+?>

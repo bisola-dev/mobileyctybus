@@ -159,7 +159,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="logo">
             <img src="yabanewlogo.png" alt="Yaba College of Technology Logo">
         </div>
-        <h2>Yaba Tech Staff Bus Portal</h2>
+        <h2>YabaTech Staff Bus Portal</h2>
         <form action="" method="POST">
             <div class="form-group">
                 <label for="username_or_email">Please log in with your staff number:</label>
@@ -177,7 +177,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" class="btn-login">Login</button>
         </form>
         <footer>
-            For complaints, please send a mail to busticketing@yabatech.edu.ng or see the CITM.
+            For complaints, please send a mail to busticketing@yabatech.edu.ng
             <p>Yaba College of Technology, CITM Software &copy; <?php echo date("Y"); ?></p>
         </footer>
     </div>

@@ -29,20 +29,17 @@ if ($kin === false) {
 
 
 // Get the current server time in Africa/Lagos timezone
-/*date_default_timezone_set('Africa/Lagos');
+date_default_timezone_set('Africa/Lagos');
 $currentHour = date('H');
-
-// Check if it's between 11:00 and 12:00 to allow access
-$allowAccess = ($currentHour >= 15 && $currentHour < 16);
-
+$allowAccess = ($currentHour == 15 && $currentMinute >= 0 && $currentMinute <= 50);
 if (!$allowAccess) {
     // If not within the allowed time range, display an error message and redirect to the dashboard
     echo '<script type="text/javascript">
-          alert("Booking is only available between 3:00 and 4:00pm (Africa/Lagos time).");
+          alert("Booking is only available between 3:00 and 3:50pm (Africa/Lagos time).");
           window.location.href="busdashboard.php";
           </script>';
     exit; // Stop further execution
-}*/
+}
 
 
 // Fetch descriptions for dropdown

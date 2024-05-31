@@ -176,6 +176,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <button type="submit" class="btn-login">Login</button>
         </form>
+
+        <!-- Procedure Link -->
+        <div class="procedure-link">
+            <p>Need help? View the procedure <a href="procedure1.pdf" download>here</a>.</p>
+        </div>
         <footer>
             For complaints, please send a mail to busticketing@yabatech.edu.ng
             <p>Yaba College of Technology, CITM Software &copy; <?php echo date("Y"); ?></p>

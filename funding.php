@@ -81,7 +81,7 @@ try {
 
         if ($data === "") {
             echo '<script type="text/javascript">alert("Error processing request, please try again later.");</script>';
-        } elseif ($data === '0' || $data === '1') {
+        } elseif (strlen($data) < 12) {
             echo '<script type="text/javascript">alert("Remitta is currently experiencing downtime. Please try again later.");</script>';
         } else {
                 // Construct redirection URL

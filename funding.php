@@ -26,7 +26,15 @@ if ($kin === false) {
     } 
 }
 
- $currentDate = date("Y-m-d");
+$currentDate = date("Y-m-d"); // Get current date in YYYY-MM-DD format
+
+// Define hours, minutes, and seconds to add
+$hoursToAdd = 1;
+$minutesToAdd = 30;
+$secondsToAdd = 45;
+
+// Calculate new date and time
+$newDateTime = date("Y-m-d H:i:s", strtotime("$currentDate + $hoursToAdd hours $minutesToAdd minutes $secondsToAdd seconds"));
 
 try {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -89,7 +97,7 @@ try {
                 
                 // Insert into 'wallet_trans' table
                 $query = "INSERT INTO [Bus_Booking].[dbo].[wallet_trans] (staffid, amount, remita_rrr, trans_date) VALUES (?, ?, ?, ?)";
-                $params = array($staffy, $amount, $data, $currentDate);
+                $params = array($staffy, $amount, $data, $newDateTime);
                 $noway3 = sqlsrv_query($conn, $query, $params);
             
                 if ($noway3 === false) {

@@ -70,7 +70,6 @@ if ($kin === false) {
             padding: 8px;
             border: 1px solid #ccc;
             text-align: left;
-            word-break: break-word; /* Break long words */
         }
 
         th {
@@ -94,6 +93,18 @@ if ($kin === false) {
         .dataTables_paginate {
             text-align: center;
         }
+
+     /* Responsive adjustments */
+     @media screen and (max-width: 768px) {
+            table {
+                font-size: 14px; /* Decrease font size for smaller screens */
+            }
+
+            .container {
+                padding: 5px; /* Reduce padding for smaller screens */
+            }
+        }
+
     </style>
 </head>
 <body>

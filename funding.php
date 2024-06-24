@@ -154,7 +154,7 @@ try {
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 500px;
-            width: 100%;
+            width: 90%;
             text-align: center;
             margin: 0 auto; /* Center the form */
         }
@@ -163,7 +163,7 @@ try {
    /* Additional styles for mobile responsiveness */
    @media (min-width: 768px) {
     .form-container {
-        width: 45%;
+        width: 50%;
     }
 }
         .form-group {

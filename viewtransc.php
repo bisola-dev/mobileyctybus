@@ -191,6 +191,17 @@ if ($result === false) {
     color: #fff;
 }
 
+        /* Responsive adjustments */
+        @media screen and (max-width: 768px) {
+            table {
+                font-size: 14px; /* Decrease font size for smaller screens */
+            }
+
+            .container {
+                padding: 5px; /* Reduce padding for smaller screens */
+            }
+        }
+
 
     </style>
 </head>
@@ -222,7 +233,7 @@ if ($result === false) {
             echo "<td>" . $row['staffid'] . "</td>";
             echo "<td>₦" . $row['amount'] . "</td>";
             echo "<td>" . $row['remita_rrr'] . "</td>";
-            echo "<td>" . $row['trans_date']->format('Y-m-d H:i:s') . "</td>";
+            echo "<td>" . $row['trans_date']->format('Y-m-d') . "</td>";
             echo "</tr>";
         }
         echo "</tbody>";

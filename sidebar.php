@@ -25,7 +25,16 @@
             overflow-x: hidden;
             padding-top: 20px;
             transition: width 0.5s; /* Add transition for smooth animation */
+            z-index: 1000; /* Ensure sidebar is above other content */
         }
+
+
+ @media screen and (max-width: 768px) {
+    #sidebar {
+        width: 100%; /* Make sidebar full width on small screens */
+        min-width: 0; /* Remove minimum width on small screens */
+    }
+}
 
         #sidebar .logo {
             text-align: center;
@@ -51,9 +60,20 @@
 
         /* Content styles */
         #content {
+    padding: 20px;
+    transition: margin-left 0.5s;
+    margin-left: 180px; /* Adjust according to sidebar width */
+}
+
+@media screen and (max-width: 768px) {
+    #content {
+        margin-left: 0; /* Ensure no margin when sidebar is hidden */
+    }
+}
+        /*#content {
             padding: 20px;
-            transition: margin-left 0.5s; /* Add transition for smooth animation */
-        }
+            transition: margin-left 0.5s; /* Add transition for smooth animation 
+        }/*
 
         /* Toggle button styles */
         .toggle-sidebar {
@@ -90,16 +110,17 @@
             var sidebar = document.getElementById("sidebar");
             var content = document.getElementById("content");
             var toggleButton = document.querySelector(".toggle-sidebar");
-
-            if (sidebar.style.display === "none") {
-                sidebar.style.display = "block";
-                content.style.marginLeft = "250px"; /* Adjust as per your sidebar width */
-                toggleButton.textContent = "Hide Sidebar";
-            } else {
-                sidebar.style.display = "none";
-                content.style.marginLeft = "0";
-                toggleButton.textContent = "Show Sidebar";
-            }
+    
+           
+     if (sidebar.style.display === "none" || sidebar.style.display === "") {
+        sidebar.style.display = "block";
+        content.style.marginLeft = "180px"; /* Adjusted to sidebar width */
+        toggleButton.textContent = "Hide Sidebar";
+        } else {
+        sidebar.style.display = "none";
+        content.style.marginLeft = "0";
+        toggleButton.textContent = "Show Sidebar";
+    }
         }
     </script>
 </body>

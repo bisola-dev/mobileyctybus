@@ -27,8 +27,23 @@ if ($kin === false) {
 }
 
 // Fetch wallet entries from the database and populate the table rows
-$walletQuery = "SELECT * FROM [Bus_Booking].[dbo].[wallet_trans] WHERE staffid = ? AND status = 1";
-$params = array($staffy);
+//$walletQuery = "SELECT TOP 1 * FROM [Bus_Booking].[dbo].[wallet_trans] WHERE staffid = ? AND status = 1";
+
+$walletQuery = "
+SELECT *
+FROM (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (PARTITION BY remita_rrr ORDER BY (SELECT NULL)) AS RowNumber
+    FROM 
+        [Bus_Booking].[dbo].[wallet_trans]
+    WHERE 
+        staffid = ? AND status = 1
+) AS T
+WHERE RowNumber = 1 OR RowNumber IS NULL;
+";
+
+$params = array($staffy,$staffy);
 $walletResult = sqlsrv_query($conn, $walletQuery, $params);
 
 if ($walletResult === false) {

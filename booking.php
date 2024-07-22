@@ -25,22 +25,24 @@ if ($kin === false) {
     } 
 }
 
-
-
-
 // Get the current server time in Africa/Lagos timezone
 date_default_timezone_set('Africa/Lagos');
 $currentHour = date('H');
-$allowAccess = ($currentHour == 15 && $currentMinute >= 0 && $currentMinute <= 50);
+$currentMinute = date('i');
+$currentDayOfWeek = date('N'); // 1 (Monday) through 7 (Sunday)
+
+// Check if current day is Monday to Friday and time is between 3:00 PM and 3:50 PM
+$allowAccess = ($currentDayOfWeek >= 1 && $currentDayOfWeek <= 5) // Monday to Friday
+            && ($currentHour == 15 && $currentMinute >= 0 && $currentMinute <= 50); // 3:00 PM to 3:50 PM
+
 if (!$allowAccess) {
     // If not within the allowed time range, display an error message and redirect to the dashboard
     echo '<script type="text/javascript">
-          alert("Booking is only available between 3:00 and 3:50pm (Africa/Lagos time).");
+          alert("Booking is only available between 3:00 and 3:50pm on weekdays (Africa/Lagos time).");
           window.location.href="busdashboard.php";
           </script>';
     exit; // Stop further execution
 }
-
 
 // Fetch descriptions for dropdown
 $descriptionQuery = "SELECT DISTINCT description,rid FROM [Bus_Booking].[dbo].[Routes]";
@@ -85,18 +87,39 @@ function getMaxSeatNumber($conn, $rid, $currentDate) {
 
 
 echo '<script src="booking_function.js"></script>';
-   
-function insertBooking($conn, $staffy, $currentDate, $rid,  $nextSeatNumber,$ticket_type ) {
+
+function insertBooking($conn, $staffy, $currentDate, $rid, $nextSeatNumber, $ticket_type, $maxRetry = 3, $retryCount = 0) {
     $tstamp = date("Y-m-d");
-    $sql = "INSERT INTO [Bus_Booking].[dbo].[Transactions] (staffid, booking_date, rid, seat_no,ticket_type) VALUES (?, ?, ?, ?,?)";
-    $stmt = sqlsrv_prepare($conn, $sql, array(&$staffy, &$tstamp, &$rid, &$nextSeatNumber, &$ticket_type));
+    $sql = "INSERT INTO [Bus_Booking].[dbo].[Transactions] (staffid, booking_date, rid, seat_no, ticket_type) VALUES (?, ?, ?, ?, ?)";
+    $params = array(&$staffy, &$tstamp, &$rid, &$nextSeatNumber, &$ticket_type);
+    $stmt = sqlsrv_prepare($conn, $sql, $params);
+    
     if ($stmt) {
         if (sqlsrv_execute($stmt)) {
             // Log success message to console
-            echo '<script type="text/javascript">alert("You have successfully booked a ticket of choice."); window.location.href="viewbooking.php";</script>';
+            echo '<script type="text/javascript">alert("You have successfully booked a ticket."); window.location.href = "viewbooking.php";</script>';
+            return true; // Return true to indicate booking success
         } else {
-            // Log error message to console
+            // Check if the error is due to a constraint violation (e.g., seat already booked)
+            $errors = sqlsrv_errors(SQLSRV_ERR_ERRORS);
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    if ($error['SQLSTATE'] == '23000') { // SQLSTATE '23000' represents integrity constraint violation
+                        // Attempt to retry with a new seat number
+                        if ($retryCount < $maxRetry) {
+                            $newSeatNumber = getMaxSeatNumber($conn, $rid, $currentDate); // Implement getMaxSeatNumber function to get an available seat
+                            return insertBooking($conn, $staffy, $currentDate, $rid, $newSeatNumber, $ticket_type, $maxRetry, $retryCount + 1);
+                        } else {
+                            // Max retry limit reached
+                            echo '<script type="text/javascript">alert("Maximum retry limit reached. Please try again later.");</script>';
+                            return false; // Return false to indicate booking failure
+                        }
+                    }
+                }
+            }
+            // Log generic error message to console
             echo '<script type="text/javascript">alert("Ticket booking unsuccessful, please try again.");</script>';
+            return false; // Return false to indicate booking failure
         }
     } else {
         // Error preparing the SQL query

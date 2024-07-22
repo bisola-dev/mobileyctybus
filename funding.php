@@ -102,7 +102,9 @@ try {
             
                 if ($noway3 === false) {
                     // Insertion failed
-                    echo '<script type="text/javascript">alert("Incomplete wallet funding, Please try again");</script>';
+                    throw new Exception('Incomplete wallet funding: ' . print_r(sqlsrv_errors(), true));
+            
+                    //echo '<script type="text/javascript">alert("Incomplete wallet funding, Please try again");</script>';
                 } else {
                     // Insertion successful
                     echo '<script type="text/javascript">alert("PAY NOW, CLICK OK"); window.location.href="'.$url2.'";</script>';
